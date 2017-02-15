@@ -1,7 +1,7 @@
 import os
 import csv
-path = '../TrainingData/'
-# path = 'C:/Users/Qiang/Downloads/data/'
+# path = '../TrainingData/'
+path = 'C:/Users/Qiang/Downloads/TrainingData/'
 
 os.chdir(path)
 samples = []
@@ -41,11 +41,11 @@ with open('driving_log6.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		samples.append(line)
+
 with open('driving_log7.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		samples.append(line)
-
 
 from sklearn.model_selection import train_test_split
 print(len(samples))
@@ -238,5 +238,5 @@ model.fit_generator(train_generator, samples_per_epoch=
 model.summary()
 
 # save the model
-os.chdir('.')
+# os.chdir('.')
 model.save('model.h5')
