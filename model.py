@@ -1,6 +1,6 @@
 import os
 import csv
-path = 'C:/Users/Qiang/Downloads/TrainingData/'
+path = '../TrainingData/'
 # path = 'C:/Users/Qiang/Downloads/data/'
 
 os.chdir(path)
@@ -234,4 +234,5 @@ model.fit_generator(train_generator, samples_per_epoch=
 model.summary()
 
 # save the model
+os.chdir('.')
 model.save('model.h5')
