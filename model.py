@@ -52,7 +52,7 @@ import numpy as np
 import sklearn
 from sklearn.utils import shuffle
 ch, row, col = 3, 66, 200  # Nvidia's paper input size
-def generator(samples, batch_size=32):
+def generator1(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates
 		# shuffle the data
@@ -114,7 +114,7 @@ def generator(samples, batch_size=32):
 			# print(X_train[0].shape)
 			yield sklearn.utils.shuffle(X_train, y_train)
 
-def generator1(samples, batch_size=32):
+def generator(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates
 		# shuffle the data
@@ -138,8 +138,7 @@ def generator1(samples, batch_size=32):
 					# trim image to only see section with road
 					# print('name', name)
 					# print('len of image ', len(center_image),'name:', name)
-					if center_image == None:
-						break
+
 					shape = center_image.shape
 
 					center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
