@@ -30,8 +30,8 @@ import cv2
 import numpy as np
 import sklearn
 from sklearn.utils import shuffle
-ch, row, col = 3, 66, 200  # Nvidia's paper input size
-# ch, row, col = 3, 160, 320  #
+# ch, row, col = 3, 66, 200  # Nvidia's paper input size
+ch, row, col = 3, 160, 320  #
 def generator(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates
@@ -119,9 +119,9 @@ def generator2(samples, batch_size=32):
 					shape = center_image.shape
 
 					# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
-					center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
+					# center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
 					center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
-					center_image = center_image.reshape(row, col, ch)
+					# center_image = center_image.reshape(row, col, ch)
 
 					center_angle = float(batch_sample[3])
 					images.append(center_image)
