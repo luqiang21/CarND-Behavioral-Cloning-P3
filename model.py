@@ -8,12 +8,12 @@ samples = []
 
 PATHS = ['track1_central/driving_log.csv',
 		   'track1_recovery/driving_log.csv',
-		   'data/track1_reverse/driving_log.csv',
-		   'data/track1_recovery_reverse/driving_log.csv',
-		   'data/track2_central/driving_log.csv',
-			'data/track1_test/driving_log.csv',
-            'data/track2_test/driving_log.csv',
-		   'data/udacity/driving_log.csv']
+		   'track1_reverse/driving_log.csv',
+		   'track1_recovery_reverse/driving_log.csv',
+		   'track2_central/driving_log.csv',
+			'track1_test/driving_log.csv',
+            'track2_test/driving_log.csv',
+		   'udacity/driving_log.csv']
 # the first line is the column names.
 for PATH in PATHS:
 	with open(PATH) as csvfile:
