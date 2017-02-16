@@ -31,6 +31,7 @@ import numpy as np
 import sklearn
 from sklearn.utils import shuffle
 ch, row, col = 3, 66, 200  # Nvidia's paper input size
+ch, row, col = 3, 160, 320  #
 def generator1(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates

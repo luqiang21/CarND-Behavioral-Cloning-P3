@@ -48,6 +48,8 @@ set_speed = 9
 controller.set_desired(set_speed)
 
 ch, row, col = 3, 66, 200  # Nvidia's camera format
+ch, row, col = 3, 160, 320  #
+
 import cv2
 
 @sio.on('telemetry')
