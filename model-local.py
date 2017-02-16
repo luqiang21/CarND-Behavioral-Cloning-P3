@@ -1,7 +1,7 @@
 import os
 import csv
 # path = '../TrainingData/'
-path = 'C:/Users/Qiang/Downloads/TrainingData/'
+path = 'C:/Users/Qiang/Downloads/data_p/'
 
 os.chdir(path)
 samples = []
@@ -10,42 +10,57 @@ samples = []
 # 	for line in reader:
 # 		samples.append(line)
 
+# # the first line is the column names.
+# with open('driving_log1.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		samples.append(line)
+#
+# with open('driving_log2.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		samples.append(line)
+#
+# with open('driving_log3.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		samples.append(line)
+#
+# # recover from lane boundary
+# with open('driving_log4.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		samples.append(line)
+#
+# with open('driving_log5.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		samples.append(line)
+# # recover from the curve where the lane boundary is vague.
+# with open('driving_log6.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		samples.append(line)
+#
+# with open('driving_log7.csv') as csvfile:
+# 	reader = csv.reader(csvfile)
+# 	for line in reader:
+# 		samples.append(line)
+
+PATHS = ['track1_central/driving_log.csv',
+		   'track1_recovery/driving_log.csv',
+		   'track1_reverse/driving_log.csv',
+		   'track1_recovery_reverse/driving_log.csv',
+		   'track2_central/driving_log.csv',
+			'track1_test/driving_log.csv',
+            'track2_test/driving_log.csv',
+		   'udacity/driving_log.csv']
 # the first line is the column names.
-with open('driving_log1.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-with open('driving_log2.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-with open('driving_log3.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-# recover from lane boundary
-with open('driving_log4.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-with open('driving_log5.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-# recover from the curve where the lane boundary is vague.
-with open('driving_log6.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-with open('driving_log7.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
+for PATH in PATHS:
+	with open(PATH) as csvfile:
+		reader = csv.reader(csvfile)
+		for line in reader:
+			samples.append(line)
 
 from sklearn.model_selection import train_test_split
 print(len(samples))
@@ -58,7 +73,7 @@ import sklearn
 from sklearn.utils import shuffle
 import matplotlib.pyplot as plt
 ch, row, col = 3, 66, 200  # Nvidia's paper input size
-def generator1(samples, batch_size=32):
+def generator(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates
 		# shuffle the data
@@ -70,13 +85,15 @@ def generator1(samples, batch_size=32):
 			angles = []
 			for batch_sample in batch_samples:
 				i = 0
-				# print(batch_sample[i].split('/'))
-				# neglect bad data
 				if len(batch_sample[i].split('/')) < 2:
 					continue
+				elif len(batch_sample[i].split('/')) == 2:
+					name = 'udacity/IMG/'+batch_sample[i].split('/')[-1]
+				else:
+				# directory = batch_sample[i].split('/')[-2]
+				# name = './'+directory+'/'+batch_sample[i].split('/')[-1]
+					name = batch_sample[i].split('/')[-3] + '/IMG/'+batch_sample[i].split('/')[-1]
 
-				directory = batch_sample[i].split('/')[-2]
-				name = './'+directory+'/'+batch_sample[i].split('/')[-1]
 
 				center_image = cv2.imread(name)
 				# trim image to only see section with road
@@ -86,7 +103,7 @@ def generator1(samples, batch_size=32):
 					break
 				shape = center_image.shape
 
-				center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
+				# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
 				center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
 				center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
 				center_image = center_image.reshape(row, col, ch)
@@ -99,19 +116,9 @@ def generator1(samples, batch_size=32):
 				angle_flipped = -center_angle
 				images.append(image_flipped)
 
-				correction = 0.2
-				# Augment the data with left and right image.
-				if i == 0:
-					angles.append(center_angle)
-					angles.append(angle_flipped)
 
-				elif i == 1:
-					angles.append(center_angle + correction)
-					angles.append(angle_flipped + correction)
-
-				else:
-					angles.append(center_angle - correction)
-					angles.append(angle_flipped - correction)
+				angles.append(center_angle)
+				angles.append(angle_flipped)
 
 			X_train = np.array(images)
 			y_train = np.array(angles)
@@ -120,7 +127,8 @@ def generator1(samples, batch_size=32):
 			# print(X_train[0].shape)
 			yield sklearn.utils.shuffle(X_train, y_train)
 
-def generator(samples, batch_size=32):
+
+def generator2(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates
 		# shuffle the data
@@ -136,34 +144,34 @@ def generator(samples, batch_size=32):
 					# neglect bad data
 					if len(batch_sample[i].split('/')) < 2:
 						continue
+					elif len(batch_sample[i].split('/')) == 2:
+						name = 'udacity/IMG/'+batch_sample[i].split('/')[-1]
+					else:
+					# directory = batch_sample[i].split('/')[-2]
+					# name = './'+directory+'/'+batch_sample[i].split('/')[-1]
+						name = batch_sample[i].split('/')[-3] + '/IMG/'+batch_sample[i].split('/')[-1]
 
-					directory = batch_sample[i].split('/')[-2]
-					name = './'+directory+'/'+batch_sample[i].split('/')[-1]
 
 					center_image = cv2.imread(name)
 					# trim image to only see section with road
 					# print('name', name)
 					# print('len of image ', len(center_image),'name:', name)
-
+					if center_image == None:
+						break
 					shape = center_image.shape
 
 					# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
-					# center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
+					center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
 					center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
-					# center_image = center_image.reshape(row, col, ch)
+					center_image = center_image.reshape(row, col, ch)
 
 					center_angle = float(batch_sample[3])
 					images.append(center_image)
-
 
 					# #augment data, so the batch becomes 64.
 					image_flipped = np.fliplr(center_image)
 					angle_flipped = -center_angle
 					images.append(image_flipped)
-
-					plt.imshow(center_image)
-					plt.imshow(image_flipped)
-					plt.show()
 
 					correction = 0.2
 					# Augment the data with left and right image.
@@ -200,42 +208,55 @@ from keras.optimizers import Adam
 
 
 input_shape = (row, col, ch)
+#
+# model = Sequential()
+# # model.add(MaxPooling2D(pool_size=(2,3),input_shape=input_shape))
+# # normalize to [-1, 1]
+# # model.add(Lambda(lambda x: x/127.5 - 1.))#,
+# 		# input_shape=(160, 320, 3),
+# 		#output_shape=(row, col, ch)))
+# model.add(Lambda(lambda x: x/255 - 0.5, input_shape = input_shape))
+# model.add(Convolution2D(5, 5, 24, subsample=(4, 4), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(5, 5, 36, subsample=(2, 2), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(5, 5, 48, subsample=(2, 2), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
+# model.add(Flatten())
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(1164))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(100))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(50))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(10))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(1))
 
+
+
+##### Simple version
 model = Sequential()
-# model.add(MaxPooling2D(pool_size=(2,3),input_shape=input_shape))
-# normalize to [-1, 1]
-# model.add(Lambda(lambda x: x/127.5 - 1.))#,
-		# input_shape=(160, 320, 3),
-		#output_shape=(row, col, ch)))
-model.add(Lambda(lambda x: x/255 - 0.5, input_shape = input_shape))
-model.add(Convolution2D(5, 5, 24, subsample=(4, 4), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(5, 5, 36, subsample=(2, 2), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(5, 5, 48, subsample=(2, 2), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
+model.add(Lambda(lambda x:x / 255.0 - 0.5, input_shape=input_shape))
+model.add(Convolution2D(6,5,5,activation='relu'))
+model.add(MaxPooling2D())
+model.add(Convolution2D(16,5,5,activation='relu'))
+model.add(MaxPooling2D())
 model.add(Flatten())
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(1164))
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(100))
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(50))
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(10))
-model.add(Dropout(.2))
-model.add(ELU())
+model.add(Dense(120))
+model.add(Dense(64))
 model.add(Dense(1))
-
-# adam = Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
-# model.compile(optimizer=adam, loss="mse", metrics=['accuracy'])
+			# adam = Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+			# model.compile(optimizer=adam, loss="mse", metrics=['accuracy'])
 #
 model.compile(loss='mse', optimizer='adam')
 model.fit_generator(train_generator, samples_per_epoch=

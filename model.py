@@ -166,39 +166,54 @@ from keras.optimizers import Adam
 
 
 input_shape = (row, col, ch)
-
+##### Simple version
 model = Sequential()
-# model.add(MaxPooling2D(pool_size=(2,3),input_shape=input_shape))
-# normalize to [-1, 1]
-# model.add(Lambda(lambda x: x/127.5 - 1.))#,
-		# input_shape=(160, 320, 3),
-		#output_shape=(row, col, ch)))
-model.add(Lambda(lambda x: x/255.0 - 0.5, input_shape = input_shape))
-model.add(Convolution2D(5, 5, 24, subsample=(4, 4), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(5, 5, 36, subsample=(2, 2), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(5, 5, 48, subsample=(2, 2), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
-model.add(ELU())
-model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
+model.add(Lambda(lambda x:x / 255.0 - 0.5, input_shape=input_shape))
+model.add(Convolution2D(6,5,5,activation='relu'))
+model.add(MaxPooling2D())
+model.add(Convolution2D(16,5,5,activation='relu'))
+model.add(MaxPooling2D())
 model.add(Flatten())
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(1164))
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(100))
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(50))
-model.add(Dropout(.2))
-model.add(ELU())
-model.add(Dense(10))
-model.add(Dropout(.2))
-model.add(ELU())
+model.add(Dense(120))
+model.add(Dense(64))
 model.add(Dense(1))
+
+
+
+
+##### Nvidia
+# model = Sequential()
+# # model.add(MaxPooling2D(pool_size=(2,3),input_shape=input_shape))
+# # normalize to [-1, 1]
+# # model.add(Lambda(lambda x: x/127.5 - 1.))#,
+# 		# input_shape=(160, 320, 3),
+# 		#output_shape=(row, col, ch)))
+# model.add(Lambda(lambda x: x/255.0 - 0.5, input_shape = input_shape))
+# model.add(Convolution2D(5, 5, 24, subsample=(4, 4), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(5, 5, 36, subsample=(2, 2), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(5, 5, 48, subsample=(2, 2), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
+# model.add(ELU())
+# model.add(Convolution2D(3, 3, 64, subsample=(2, 2), border_mode="same"))
+# model.add(Flatten())
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(1164))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(100))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(50))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(10))
+# model.add(Dropout(.2))
+# model.add(ELU())
+# model.add(Dense(1))
 
 # adam = Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 # model.compile(optimizer=adam, loss="mse", metrics=['accuracy'])
