@@ -129,9 +129,9 @@ def generator(samples, batch_size=32):
 					shape = center_image.shape
 
 					# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
-					# center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
+					center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
 					center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
-					# center_image = center_image.reshape(row, col, ch)
+					center_image = center_image.reshape(row, col, ch)
 
 					center_angle = float(batch_sample[3])
 					images.append(center_image)
