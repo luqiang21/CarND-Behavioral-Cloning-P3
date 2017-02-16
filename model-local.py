@@ -56,6 +56,7 @@ import cv2
 import numpy as np
 import sklearn
 from sklearn.utils import shuffle
+import matplotlib.pyplot as plt
 ch, row, col = 3, 66, 200  # Nvidia's paper input size
 def generator1(samples, batch_size=32):
 	num_samples = len(samples)
@@ -146,18 +147,23 @@ def generator(samples, batch_size=32):
 
 					shape = center_image.shape
 
-					center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
-					center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
+					# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
+					# center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
 					center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
-					center_image = center_image.reshape(row, col, ch)
+					# center_image = center_image.reshape(row, col, ch)
 
 					center_angle = float(batch_sample[3])
 					images.append(center_image)
+
 
 					# #augment data, so the batch becomes 64.
 					image_flipped = np.fliplr(center_image)
 					angle_flipped = -center_angle
 					images.append(image_flipped)
+
+					plt.imshow(center_image)
+					plt.imshow(image_flipped)
+					plt.show()
 
 					correction = 0.2
 					# Augment the data with left and right image.

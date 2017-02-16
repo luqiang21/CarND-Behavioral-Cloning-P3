@@ -68,8 +68,8 @@ def telemetry(sid, data):
         # get shape and chop off 1/3 from the top
         shape = image_array.shape
         # note: numpy arrays are (row, col)!
-        image_array = image_array[shape[0]/3:shape[0], 0:shape[1]]
-        image_array = cv2.resize(image_array, (col, row), interpolation=cv2.INTER_AREA)
+        # image_array = image_array[shape[0]/3:shape[0], 0:shape[1]]
+        # image_array = cv2.resize(image_array, (col, row), interpolation=cv2.INTER_AREA)
         image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2YUV)
 
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
