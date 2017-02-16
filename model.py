@@ -158,7 +158,7 @@ validation_generator = generator(validation_samples, batch_size=32)
 
 
 from keras.models import Sequential, model_from_json
-from keras.layers import Dense, Dropout, Activation, Flatten, Lambda, ELU
+from keras.layers import Dense, Dropout, Activation, Flatten, Lambda, ELU, Cropping2D
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import Adam
 
@@ -169,6 +169,7 @@ input_shape = (row, col, ch)
 ##### Simple version
 model = Sequential()
 model.add(Lambda(lambda x:x / 255.0 - 0.5, input_shape=input_shape))
+model.add(Cropping2D(cropping=((70,25),(0,0))))
 model.add(Convolution2D(6,5,5,activation='relu'))
 model.add(MaxPooling2D())
 model.add(Convolution2D(16,5,5,activation='relu'))
