@@ -1,7 +1,7 @@
 import os
 import csv
 path = '../data_p/'
-# path = 'C:/Users/Qiang/Downloads/data/'
+path = 'C:/Users/Qiang/Downloads/data_p/'
 
 os.chdir(path)
 samples = []
@@ -43,14 +43,16 @@ def generator1(samples, batch_size=32):
 			angles = []
 			for batch_sample in batch_samples:
 				i = 0
-				# print(batch_sample[i].split('/'))
+				print(batch_sample[i].split('/'))
 				# neglect bad data
 				if len(batch_sample[i].split('/')) < 2:
 					continue
-
-				directory = batch_sample[i].split('/')[-2]
-				name = './'+directory+'/'+batch_sample[i].split('/')[-1]
-
+				elif len(batch_sample[i].split('/')) == 2:
+					name = 'udacity/IMG/'+batch_sample[i].split('/')[-1]
+				else:
+				# directory = batch_sample[i].split('/')[-2]
+				# name = './'+directory+'/'+batch_sample[i].split('/')[-1]
+					name = './IMG/'+batch_sample[i].split('/')[-1]
 				center_image = cv2.imread(name)
 				# trim image to only see section with road
 				# print('name', name)
@@ -109,9 +111,13 @@ def generator(samples, batch_size=32):
 					# neglect bad data
 					if len(batch_sample[i].split('/')) < 2:
 						continue
+					elif len(batch_sample[i].split('/')) == 2:
+						name = 'udacity/IMG/'+batch_sample[i].split('/')[-1]
+					else:
+					# directory = batch_sample[i].split('/')[-2]
+					# name = './'+directory+'/'+batch_sample[i].split('/')[-1]
+						name = batch_sample[i].split('/')[-3] + '/IMG/'+batch_sample[i].split('/')[-1]
 
-					directory = batch_sample[i].split('/')[-2]
-					name = './'+directory+'/'+batch_sample[i].split('/')[-1]
 
 					center_image = cv2.imread(name)
 					# trim image to only see section with road
