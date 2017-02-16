@@ -117,7 +117,8 @@ def generator(samples, batch_size=32):
 					# trim image to only see section with road
 					# print('name', name)
 					# print('len of image ', len(center_image),'name:', name)
-
+					if center_image == None:
+						break
 					shape = center_image.shape
 
 					center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
