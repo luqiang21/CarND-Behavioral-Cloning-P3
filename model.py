@@ -173,7 +173,7 @@ model = Sequential()
 # model.add(Lambda(lambda x: x/127.5 - 1.))#,
 		# input_shape=(160, 320, 3),
 		#output_shape=(row, col, ch)))
-model.add(Lambda(lambda x: x/255 - 0.5, input_shape = input_shape))
+model.add(Lambda(lambda x: x/255.0 - 0.5, input_shape = input_shape))
 model.add(Convolution2D(5, 5, 24, subsample=(4, 4), border_mode="same"))
 model.add(ELU())
 model.add(Convolution2D(5, 5, 36, subsample=(2, 2), border_mode="same"))
