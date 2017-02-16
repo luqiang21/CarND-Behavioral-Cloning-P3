@@ -1,7 +1,7 @@
 import os
 import csv
 path = '../data_p/'
-path = 'C:/Users/Qiang/Downloads/data_p/'
+# path = 'C:/Users/Qiang/Downloads/data_p/'
 
 os.chdir(path)
 samples = []
