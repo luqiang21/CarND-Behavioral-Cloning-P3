@@ -44,8 +44,6 @@ def generator(samples, batch_size=32):
 			angles = []
 			for batch_sample in batch_samples:
 				i = 0
-				print(batch_sample[i].split('/'))
-				# neglect bad data
 				if len(batch_sample[i].split('/')) < 2:
 					continue
 				elif len(batch_sample[i].split('/')) == 2:
@@ -53,7 +51,9 @@ def generator(samples, batch_size=32):
 				else:
 				# directory = batch_sample[i].split('/')[-2]
 				# name = './'+directory+'/'+batch_sample[i].split('/')[-1]
-					name = './IMG/'+batch_sample[i].split('/')[-1]
+					name = batch_sample[i].split('/')[-3] + '/IMG/'+batch_sample[i].split('/')[-1]
+
+
 				center_image = cv2.imread(name)
 				# trim image to only see section with road
 				# print('name', name)
@@ -75,19 +75,9 @@ def generator(samples, batch_size=32):
 				angle_flipped = -center_angle
 				images.append(image_flipped)
 
-				correction = 0.2
-				# Augment the data with left and right image.
-				if i == 0:
-					angles.append(center_angle)
-					angles.append(angle_flipped)
 
-				elif i == 1:
-					angles.append(center_angle + correction)
-					angles.append(angle_flipped + correction)
-
-				else:
-					angles.append(center_angle - correction)
-					angles.append(angle_flipped - correction)
+				angles.append(center_angle)
+				angles.append(angle_flipped)
 
 			X_train = np.array(images)
 			y_train = np.array(angles)
