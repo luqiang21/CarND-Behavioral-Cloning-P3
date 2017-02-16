@@ -32,7 +32,7 @@ import sklearn
 from sklearn.utils import shuffle
 ch, row, col = 3, 66, 200  # Nvidia's paper input size
 # ch, row, col = 3, 160, 320  #
-def generator1(samples, batch_size=32):
+def generator(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates
 		# shuffle the data
@@ -96,7 +96,7 @@ def generator1(samples, batch_size=32):
 			# print(X_train[0].shape)
 			yield sklearn.utils.shuffle(X_train, y_train)
 
-def generator(samples, batch_size=32):
+def generator2(samples, batch_size=32):
 	num_samples = len(samples)
 	while 1: # Loop forever so the generator never terminates
 		# shuffle the data
