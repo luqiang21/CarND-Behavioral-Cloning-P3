@@ -1,51 +1,25 @@
 import os
 import csv
-path = '../TrainingData/'
+path = '../data_p/'
 # path = 'C:/Users/Qiang/Downloads/data/'
 
 os.chdir(path)
 samples = []
-# with open('driving_log.csv') as csvfile:
-# 	reader = csv.reader(csvfile)
-# 	for line in reader:
-# 		samples.append(line)
 
+PATHS = ['track1_central/driving_log.csv',
+		   'track1_recovery/driving_log.csv',
+		   'data/track1_reverse/driving_log.csv',
+		   'data/track1_recovery_reverse/driving_log.csv',
+		   'data/track2_central/driving_log.csv',
+			'data/track1_test/driving_log.csv',
+            'data/track2_test/driving_log.csv',
+		   'data/udacity/driving_log.csv']
 # the first line is the column names.
-with open('driving_log1.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-with open('driving_log2.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-with open('driving_log3.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-# recover from lane boundary
-with open('driving_log4.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
-with open('driving_log5.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-# recover from the curve where the lane boundary is vague.
-with open('driving_log6.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-with open('driving_log7.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		samples.append(line)
-
+for PATH in PATHS:
+	with open(PATH) as csvfile:
+		reader = csv.reader(csvfile)
+		for line in reader:
+			samples.append(line)
 
 from sklearn.model_selection import train_test_split
 print(len(samples))
