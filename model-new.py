@@ -13,9 +13,7 @@ from sklearn.model_selection import train_test_split
 
 
 def loadData(PATH):
-	""" Load the images and steering angles from the basePath
-		assuming the headline of the CSV file is removed (starting the image name)
-	:param basepath: base path which contains the csv file and IMG folder
+	""" Load the images and steering angles
 	:return: images, angles
 	"""
 	lines = []
@@ -214,6 +212,9 @@ PATHS = ['track1_central/driving_log.csv',
 			'track2_test/driving_log.csv']
 # load the csv file
 print('loading the data...')
+path = '../data_p/'
+# path = 'C:/Users/Qiang/Downloads/data_p/'
+os.chdir(path)
 
 samples = []
 for PATH in PATHS:
