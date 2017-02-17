@@ -12,14 +12,14 @@ from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 
 
-def loadData(basePath):
+def loadData(PATH):
 	""" Load the images and steering angles from the basePath
 		assuming the headline of the CSV file is removed (starting the image name)
 	:param basepath: base path which contains the csv file and IMG folder
 	:return: images, angles
 	"""
 	lines = []
-	with open(path.join(basePath,'driving_log.csv')) as f:
+	with open(PATH) as f:
 		content = csv.reader(f)
 		for line in content:
 			lines.append(line)
