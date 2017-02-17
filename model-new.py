@@ -17,7 +17,9 @@ PATHS = ['track1_central/driving_log.csv',
 			'track1_test/driving_log.csv',
             'track2_test/driving_log.csv',
 		   'udacity/driving_log.csv']
-PATHS = [ 'udacity/driving_log.csv']
+# PATHS = [ 'udacity/driving_log.csv']
+# PATHS = [ 'udacity/driving_log3.csv']
+
 # PATHS = ['track1_central/driving_log.csv',
 # 		   'track1_recovery/driving_log.csv',
 # 		   'track1_reverse/driving_log.csv',
@@ -81,6 +83,9 @@ model.add(Dense(1))
 
 model.compile(optimizer='adam', loss='mse')
 model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch = 3, batch_size = 32)
+
+
 # save the model
 os.chdir('.')
 model.save('model.h5')
+print ('saved')
