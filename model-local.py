@@ -72,6 +72,22 @@ import numpy as np
 import sklearn
 from sklearn.utils import shuffle
 import matplotlib.pyplot as plt
+
+############## obtain original image and the flipped one
+# names = samples[11000]
+# i = 0
+# if len(names[i].split('/')) == 2:
+# 	name = 'udacity/IMG/'+names[i].split('/')[-1]
+# else:
+# 	name = names[i].split('/')[-3] + '/IMG/'+names[i].split('/')[-1]
+# center_image = cv2.imread(name)
+# image_flipped = np.fliplr(center_image)
+# plt.imshow(center_image)
+# plt.show()
+# plt.imshow(image_flipped)
+# plt.show()
+
+
 # ch, row, col = 3, 66, 200  # Nvidia's paper input size
 ch, row, col = 3, 160, 320
 def generator(samples, batch_size=32):
@@ -106,7 +122,9 @@ def generator(samples, batch_size=32):
 
 				# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
 				# center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
+
 				center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
+
 				# center_image = center_image.reshape(row, col, ch)
 
 				center_angle = float(batch_sample[3])
@@ -116,6 +134,7 @@ def generator(samples, batch_size=32):
 				image_flipped = np.fliplr(center_image)
 				angle_flipped = -center_angle
 				images.append(image_flipped)
+
 
 
 				angles.append(center_angle)
@@ -202,7 +221,7 @@ validation_generator = generator(validation_samples, batch_size=32)
 
 from keras.models import Sequential, model_from_json
 from keras.layers import Dense, Dropout, Activation, Flatten, Lambda, ELU
-from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers import Convolution2D, MaxPooling2D, Cropping2D
 from keras.optimizers import Adam
 
 # Preprocess incoming data, centered around zero with small standard deviation
@@ -248,6 +267,7 @@ input_shape = (row, col, ch)
 ##### Simple version
 model = Sequential()
 model.add(Lambda(lambda x:x / 255.0 - 0.5, input_shape=input_shape))
+model.add(Cropping2D(cropping=((70,25),(0,0))))
 model.add(Convolution2D(6,5,5,activation='relu'))
 model.add(MaxPooling2D())
 model.add(Convolution2D(16,5,5,activation='relu'))
@@ -262,7 +282,7 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 model.fit_generator(train_generator, samples_per_epoch=
 			6*len(train_samples), validation_data=validation_generator,
-			nb_val_samples=len(validation_samples), nb_epoch=7)#5)
+			nb_val_samples=len(validation_samples), nb_epoch=5)
 model.summary()
 
 # save the model

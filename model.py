@@ -22,7 +22,7 @@ for PATH in PATHS:
 			samples.append(line)
 
 from sklearn.model_selection import train_test_split
-print(len(samples))
+# print(len(samples))
 samples = samples[:(len(samples) // 32) * 32]
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 print(len(samples))
@@ -222,7 +222,7 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 model.fit_generator(train_generator, samples_per_epoch=
 			6*len(train_samples), validation_data=validation_generator,
-			nb_val_samples=len(validation_samples), nb_epoch=7)#5)
+			nb_val_samples=len(validation_samples), nb_epoch=5)
 model.summary()
 
 # save the model

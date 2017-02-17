@@ -23,8 +23,8 @@ The goals / steps of this project are the following:
 [image3]: ./images/recover1.jpg "Recovery Image"
 [image4]: ./images/recover2.jpg "Recovery Image"
 [image5]: ./images/recover3.jpg "Recovery Image"
-[image6]: ./images/placeholder_small.png "Normal Image"
-[image7]: ./images/placeholder_small.png "Flipped Image"
+[image6]: ./images/original.png "Normal Image"
+[image7]: ./images/flipped.png "Flipped Image"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -119,9 +119,9 @@ To augment the data sat, I also flipped images and angles thinking that this wou
 ![alt text][image6]
 ![alt text][image7]
 
-Etc ....
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+
+After the collection process, I had 115350 number of data points. I then preprocessed this data by ...
 
 
 I finally randomly shuffled the data set and put Y% of the data into a validation set. 
