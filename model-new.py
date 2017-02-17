@@ -51,7 +51,7 @@ for sample in samples:
 	# plt.imshow(image)
 	# plt.show()
 	# print(len(image))
-	exit()
+	# exit()
 
 print('Number of images read:',len(images))
 print(len(angles))
