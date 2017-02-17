@@ -14,6 +14,7 @@ PATHS = ['track1_central/driving_log.csv',
 			'track1_test/driving_log.csv',
             'track2_test/driving_log.csv',
 		   'udacity/driving_log.csv']
+PATHS = [ 'udacity/driving_log.csv']
 # the first line is the column names.
 for PATH in PATHS:
 	with open(PATH) as csvfile:
