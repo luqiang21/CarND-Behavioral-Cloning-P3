@@ -37,18 +37,20 @@ for sample in samples:
 	source_path = sample[0] # center image
 	tokens = source_path.split('/')
 	filename = tokens[-1]
-	if len(tokens) <= 2:
+	if len(tokens) <2:
+		continue
+	elif len(tokens) == 2:
 		local_path = './udacity/IMG/' + filename
 	else:
 		local_path = tokens[-3] + '/' + tokens[-2] + '/' + filename
-	print(local_path)
+	# print(local_path)
 	image = cv2.imread(local_path)
 	images.append(image)
 	angle = sample[3]
 	angles.append(angle)
 	# plt.imshow(image)
 	# plt.show()
-	print(len(image))
+	# print(len(image))
 	exit()
 
 print('Number of images read:',len(images))
