@@ -41,13 +41,16 @@ for sample in samples:
 		local_path = './udacity/IMG/' + filename
 	else:
 		local_path = tokens[-3] + '/' + tokens[-2] + '/' + filename
-	# print(local_path)
+	print(local_path)
 	image = cv2.imread(local_path)
 	images.append(image)
 	angle = sample[3]
 	angles.append(angle)
 	# plt.imshow(image)
 	# plt.show()
+	print(len(image))
+	exit()
+
 print('Number of images read:',len(images))
 print(len(angles))
 
@@ -75,7 +78,7 @@ model.add(Dense(64))
 model.add(Dense(1))
 
 model.compile(optimizer='adam', loss='mse')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True)
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch = 3, batch_size = 32)
 # save the model
 os.chdir('.')
 model.save('model.h5')
