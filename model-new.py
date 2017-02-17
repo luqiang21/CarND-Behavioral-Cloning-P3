@@ -214,6 +214,7 @@ PATHS = ['track1_central/driving_log.csv',
 print('loading the data...')
 path = '../data_p/'
 # path = 'C:/Users/Qiang/Downloads/data_p/'
+import os
 os.chdir(path)
 
 samples = []
