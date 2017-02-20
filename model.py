@@ -14,14 +14,23 @@ PATHS = ['track1_central/driving_log.csv',
 			'track1_test/driving_log.csv',
             'track2_test/driving_log.csv',
 		   'udacity/driving_log.csv']
-PATHS = [ 'udacity/driving_log.csv']
 PATHS = ['track1_central/driving_log.csv',
 		   'track1_recovery/driving_log.csv',
 		   'track1_reverse/driving_log.csv',
 		   'track1_recovery_reverse/driving_log.csv',
-		   'track2_central/driving_log.csv',
 			'track1_test/driving_log.csv',
-            'track2_test/driving_log.csv']
+		 	'track1_curve_after_bridge/driving_log.csv',
+		   'udacity/driving_log.csv']
+PATHS = [	'track1_curve_after_bridge/driving_log.csv',
+		 	'udacity/driving_log.csv' ]
+PATHS = [ 'udacity/driving_log.csv']
+# PATHS = ['track1_central/driving_log.csv',
+# 		   'track1_recovery/driving_log.csv',
+# 		   'track1_reverse/driving_log.csv',
+# 		   'track1_recovery_reverse/driving_log.csv',
+# 		   'track2_central/driving_log.csv',
+# 			'track1_test/driving_log.csv',
+#             'track2_test/driving_log.csv']
 # the first line is the column names.
 for PATH in PATHS:
 	with open(PATH) as csvfile:
@@ -51,47 +60,55 @@ def generator(samples, batch_size=32):
 			images = []
 			angles = []
 			for batch_sample in batch_samples:
-				i = 0
-				if len(batch_sample[i].split('/')) < 2:
-					continue
-				elif len(batch_sample[i].split('/')) == 2:
-					name = 'udacity/IMG/'+batch_sample[i].split('/')[-1]
-				else:
-				# directory = batch_sample[i].split('/')[-2]
-				# name = './'+directory+'/'+batch_sample[i].split('/')[-1]
-					name = batch_sample[i].split('/')[-3] + '/IMG/'+batch_sample[i].split('/')[-1]
+				for i in range(3):
+					# i = 0
+					if len(batch_sample[i].split('/')) < 2:
+						continue
+					elif len(batch_sample[i].split('/')) == 2:
+						name = 'udacity/IMG/'+batch_sample[i].split('/')[-1]
+					else:
+					# directory = batch_sample[i].split('/')[-2]
+					# name = './'+directory+'/'+batch_sample[i].split('/')[-1]
+						name = batch_sample[i].split('/')[-3] + '/IMG/'+batch_sample[i].split('/')[-1]
 
 
-				center_image = cv2.imread(name)
-				# trim image to only see section with road
-				# print('name', name)
-				# print('len of image ', len(center_image),'name:', name)
-				if center_image == None:
-					break
-				shape = center_image.shape
+					center_image = cv2.imread(name)
+					# trim image to only see section with road
+					# print('name', name)
+					# print('len of image ', len(center_image),'name:', name)
+					if center_image == None:
+						break
+					shape = center_image.shape
 
-				# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
-				center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
-				center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
-				center_image = center_image.reshape(row, col, ch)
+					# center_image = center_image[int(shape[0]/3):shape[0], 0:shape[1]]
+					# center_image = cv2.resize(center_image, (row, col), interpolation=cv2.INTER_AREA)
+					# center_image = cv2.cvtColor(center_image, cv2.COLOR_RGB2YUV)
+					# center_image = center_image.reshape(row, col, ch)
 
-				center_angle = float(batch_sample[3])
-				images.append(center_image)
+					angle = float(batch_sample[3])
+					images.append(center_image)
 
-				# #augment data, so the batch becomes 64.
-				image_flipped = np.fliplr(center_image)
-				angle_flipped = -center_angle
-				images.append(image_flipped)
+				# # #Flipping image, augment data, so the batch becomes 64.
+				# image_flipped = np.fliplr(center_image)
+				# angle_flipped = -angle
+				# images.append(image_flipped)
+				#
+				#
+				angles.append(angle)
+				# angles.append(angle_flipped)
+				correction = 0.25
+				left_angle = angle + correction
+				right_angle = angle - correction
+				angles.append(left_angle)
+				angles.append(right_angle)
 
-
-				angles.append(center_angle)
-				angles.append(angle_flipped)
 
 			X_train = np.array(images)
 			y_train = np.array(angles)
 
 
 			# print(X_train[0].shape)
+			# print(len(X_train), len(y_train))
 			yield sklearn.utils.shuffle(X_train, y_train)
 
 
@@ -164,7 +181,7 @@ model.add(Dense(1))
 #
 model.compile(loss='mse', optimizer='adam')
 model.fit_generator(train_generator, samples_per_epoch=
-			6*len(train_samples), validation_data=validation_generator,
+			len(train_samples), validation_data=validation_generator,
 			nb_val_samples=len(validation_samples), nb_epoch=5)
 model.summary()
 
