@@ -87,7 +87,7 @@ input_shape = (160, 320, 3)
 
 model = Sequential()
 
-model.add(Conv2D(24, 5, 5, border_mode='valid', subsample=(2,2), activation="relu", input_shape=(66, 200, 3)))
+model.add(Convolution2D(24, 5, 5, border_mode='valid', subsample=(2,2), activation="relu", input_shape=(66, 200, 3)))
 model.add(BatchNormalization(axis=-1))
 model.add(Convolution2D(36, 5, 5, border_mode="valid", subsample=(2,2), activation="elu"))
 model.add(BatchNormalization(axis=-1))
