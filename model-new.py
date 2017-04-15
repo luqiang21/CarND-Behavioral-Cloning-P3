@@ -6,7 +6,7 @@ import numpy as np
 
 path = '../data_p/'
 path = 'C:/Users/Qiang/Downloads/data_p/'
-
+path = '/Users/LuQiang/Downloads/data_p/'
 os.chdir(path)
 samples = []
 
@@ -45,12 +45,15 @@ for PATH in PATHS:
 			samples.append(line)
 images = []
 angles = []
+speeds = []
+
 for sample in samples:
 	# use left and right images
 	# I tried, no improvements.
 	angle = float(sample[3])
+	speed = float(sample[-1])
 
-	for i in range(3):
+	for i in range(1):
 		source_path = sample[i] #
 		tokens = source_path.split('/')
 		filename = tokens[-1]
@@ -63,13 +66,14 @@ for sample in samples:
 		# print(local_path)
 		image = cv2.imread(local_path)
 		images.append(image)
+	speeds.append(speed)
 
-	correction = 0.25
-	angle_left = angle + correction
-	angle_right = angle - correction
-	angles.append(angle)
-	angles.append(angle_left) #
-	angles.append(angle_right)
+	# correction = 0.25
+	# angle_left = angle + correction
+	# angle_right = angle - correction
+	# angles.append(angle)
+	# angles.append(angle_left) #
+	# angles.append(angle_right)
 	# plt.imshow(image)
 	# plt.show()
 	# print(len(image))
@@ -82,8 +86,9 @@ for sample in samples:
 	# angles.append(angle_flipped)
 
 print('Number of images read:',len(images))
-print(len(angles))
-
+# print(len(angles))
+print(len(speeds))
+angles = speeds
 X_train = np.asarray(images)
 y_train = np.asarray(angles)
 
